@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+<h2>Formulario de Clientes</h2>
+
+<input type="hidden" id="id_cliente">
+
+<input id="nombre" placeholder="Nombre">
+<input id="email" placeholder="Email">
+<input id="telefono" placeholder="Teléfono">
+
+<div class="botones">
+    <button class="insertar" onclick="insertar()">Insertar</button>
+    <button class="consultar" onclick="consultar()">Consultar</button>
+    <button class="modificar" onclick="modificar()">Modificar</button>
+    <button class="eliminar" onclick="eliminar()">Eliminar</button>
+</div>
+
+<div class="estado" id="estado"></div>
+
+<table>
+<thead>
+<tr>
+    <th>Nombre</th>
+    <th>Email</th>
+    <th>Teléfono</th>
+</tr>
+</thead>
+<tbody id="tabla"></tbody>
+</table>
+</div>
+
+<script>
+let seleccionado = null;
+
+function mensaje(texto, color="green") {
+    estado.innerText = texto;
+    estado.style.color = color;
+}
+
+function insertar() {
+    fetch("/clientes", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            nombre: nombre.value,
+            email: email.value,
+            telefono: telefono.value
+        })
+    }).then(() => {
+        mensaje("Cliente insertado ✅");
+        limpiar();
+        consultar();
+    });
+}
+
+function consultar() {
+    fetch("/clientes")
+    .then(res => res.json())
+    .then(data => {
+        tabla.innerHTML = "";
+        data.forEach(c => {
+            tabla.innerHTML += `
+            <tr onclick='seleccionar("${c.id_cliente}","${c.nombre}","${c.email}","${c.telefono}")'>
+                <td>${c.nombre}</td>
+                <td>${c.email}</td>
+                <td>${c.telefono}</td>
+            </tr>`;
+        });
+        mensaje("Datos cargados 📋", "blue");
+    });
+}
+
+function seleccionar(idCliente,n,e,t) {
+    seleccionado = idCliente;
+    nombre.value = n;
+    email.value = e;
+    telefono.value = t;
+    mensaje("Registro seleccionado ✏️", "orange");
+}
+
+function modificar() {
+    if (!seleccionado) {
+        mensaje("Seleccione un registro", "red");
+        return;
+    }
+
+    fetch("/clientes/" + seleccionado, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            nombre: nombre.value,
+            email: email.value,
+            telefono: telefono.value
+        })
+    }).then(() => {
+        mensaje("Cliente modificado ✅");
+        limpiar();
+        consultar();
+    });
+}
+
+function eliminar() {
+    if (!seleccionado) {
+        mensaje("Seleccione un registro", "red");
+        return;
+    }
+
+    fetch("/clientes/" + seleccionado, { method: "DELETE" })
+    .then(() => {
+        mensaje("Cliente eliminado 🗑️", "red");
+        limpiar();
+        consultar();
+    });
+}
+
+function limpiar() {
+    nombre.value = "";
+    email.value = "";
+    telefono.value = "";
+    seleccionado = null;
+}
+</script>
+
+</body>
+</html>

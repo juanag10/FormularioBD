@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(120deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    width: 420px;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0 12px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.botones {
+    text-align: center;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+.insertar { background: #4CAF50; }
+.consultar { background: #2196F3; }
+.modificar { background: #FFC107; color: black; }
+.eliminar { background: #F44336; }
+
+button:hover {
+    opacity: 0.9;
+}
+
+.estado {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
+}
+
+th {
+    background: #f4f4f4;
+}
+
+tr:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+}
